@@ -64,6 +64,7 @@ class @ModeSwitcher
     @cfg.uiRef.glyph.removeClass().addClass('glyphicon')
     if @_currentMode.glyph()
       @cfg.uiRef.glyph.addClass("glyphicon-" + @_currentMode.glyph())
+      @cfg.uiRef.glyph.addClass("hidden-print")
     @cfg.uiRef.stateText.text(@_currentMode.title())
     @cfg.uiRef.subtitleText.text(@_currentMode.subtitle() or "")
     @cfg.uiRef.codeInput.attr("placeholder", @_currentMode.inputPlaceholder())
