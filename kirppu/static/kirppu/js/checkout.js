@@ -1571,9 +1571,11 @@
         safeAlert("Cannot print while receipt is active!");
         return;
       }
-      return Api.receipt_print().then((function(_this) {
+      return Api.receipt_get({
+        id: this._receipt.data.id
+      }).then((function(_this) {
         return function(data) {
-          return console.log(_this._receipt);
+          return console.log(data);
         };
       })(this), (function(_this) {
         return function() {

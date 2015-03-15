@@ -203,9 +203,9 @@ class @CounterMode extends ItemCheckoutMode
       safeAlert("Cannot print while receipt is active!")
       return
 
-    Api.receipt_print().then(
+    Api.receipt_get(id: @_receipt.data.id).then(
       (data) =>
-        console.log(@_receipt)
+        console.log(data)
 
       () =>
         safeAlert("Error printing receipt!")

@@ -371,10 +371,6 @@ def receipt_abort(request):
     del request.session["receipt"]
     return receipt.as_dict()
 
-@ajax_func('^receipt/print$')
-def receipt_print(request):
-    return receipt.as_dict()
-
 def _get_receipt_data_with_items(**kwargs):
     receipt = get_object_or_404(Receipt, **kwargs)
     receipt_items = ReceiptItem.objects.filter(receipt_id=receipt.pk).order_by("add_time")
