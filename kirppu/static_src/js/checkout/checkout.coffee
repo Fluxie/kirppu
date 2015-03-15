@@ -30,6 +30,7 @@ class Config
     removeItemPrefix: "-"
     payPrefix: "+"
     abortPrefix: null
+    printPrefix: null
     logoutPrefix: null
     counterCode: null
     clerkName: null

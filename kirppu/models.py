@@ -42,10 +42,12 @@ UserAdapter = import_by_path(settings.KIRPPU_USER_ADAPTER)
 class CounterCommands(object):
     LOGOUT = ":exit"
     ABORT = ":abrt"
+    PRINT = ":print"
 
     DICT = {
         LOGOUT: _(u"Logout"),
         ABORT: _(u"Abort"),
+        PRINT: _(u"Print"),
     }
 
 

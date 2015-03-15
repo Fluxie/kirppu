@@ -14,6 +14,7 @@ class @CounterMode extends ItemCheckoutMode
 
   actions: -> [
     [@cfg.settings.abortPrefix,       @onAbortReceipt]
+    [@cfg.settings.printPrefix,       @onPrintReceipt]
     [@cfg.settings.logoutPrefix,      @onLogout]
     [@cfg.settings.payPrefix,         @onPayReceipt]
     [@cfg.settings.removeItemPrefix,  @onRemoveItem]
@@ -194,6 +195,20 @@ class @CounterMode extends ItemCheckoutMode
 
       () =>
         safeAlert("Error ending receipt!")
+        return true
+    )
+
+   onPrintReceipt: =>
+    if @_receipt.isActive()
+      safeAlert("Cannot print while receipt is active!")
+      return
+
+    Api.receipt_print().then(
+      (data) =>
+        console.log(@_receipt)
+
+      () =>
+        safeAlert("Error printing receipt!")
         return true
     )
 

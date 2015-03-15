@@ -134,6 +134,7 @@
       removeItemPrefix: "-",
       payPrefix: "+",
       abortPrefix: null,
+      printPrefix: null,
       logoutPrefix: null,
       counterCode: null,
       clerkName: null,
@@ -1307,6 +1308,7 @@
       var args, i, modeArgs;
       args = 2 <= arguments.length ? slice.call(arguments, 0, i = arguments.length - 1) : (i = 0, []), modeArgs = arguments[i++];
       this.onLogout = bind(this.onLogout, this);
+      this.onPrintReceipt = bind(this.onPrintReceipt, this);
       this.onAbortReceipt = bind(this.onAbortReceipt, this);
       this.onPayReceipt = bind(this.onPayReceipt, this);
       this.onRemoveItem = bind(this.onRemoveItem, this);
@@ -1330,7 +1332,7 @@
     };
 
     CounterMode.prototype.actions = function() {
-      return [[this.cfg.settings.abortPrefix, this.onAbortReceipt], [this.cfg.settings.logoutPrefix, this.onLogout], [this.cfg.settings.payPrefix, this.onPayReceipt], [this.cfg.settings.removeItemPrefix, this.onRemoveItem], ["", this.onAddItem]];
+      return [[this.cfg.settings.abortPrefix, this.onAbortReceipt], [this.cfg.settings.printPrefix, this.onPrintReceipt], [this.cfg.settings.logoutPrefix, this.onLogout], [this.cfg.settings.payPrefix, this.onPayReceipt], [this.cfg.settings.removeItemPrefix, this.onRemoveItem], ["", this.onAddItem]];
     };
 
     CounterMode.prototype.enter = function() {
@@ -1559,6 +1561,23 @@
       })(this), (function(_this) {
         return function() {
           safeAlert("Error ending receipt!");
+          return true;
+        };
+      })(this));
+    };
+
+    CounterMode.prototype.onPrintReceipt = function() {
+      if (this._receipt.isActive()) {
+        safeAlert("Cannot print while receipt is active!");
+        return;
+      }
+      return Api.receipt_print().then((function(_this) {
+        return function(data) {
+          return console.log(_this._receipt);
+        };
+      })(this), (function(_this) {
+        return function() {
+          safeAlert("Error printing receipt!");
           return true;
         };
       })(this));
