@@ -204,8 +204,8 @@ class @CounterMode extends ItemCheckoutMode
       return
 
     Api.receipt_get(id: @_receipt.data.id).then(
-      (data) =>
-        console.log(data)
+      (receipt) =>
+        @switcher.switchTo( ReceiptPrintMode, receipt )
 
       () =>
         safeAlert("Error printing receipt!")

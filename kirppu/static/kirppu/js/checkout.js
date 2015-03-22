@@ -1574,8 +1574,8 @@
       return Api.receipt_get({
         id: this._receipt.data.id
       }).then((function(_this) {
-        return function(data) {
-          return console.log(data);
+        return function(receipt) {
+          return _this.switcher.switchTo(ReceiptPrintMode, receipt);
         };
       })(this), (function(_this) {
         return function() {
@@ -1649,15 +1649,19 @@
 
     ReceiptPrintMode.strSell = "%d, served by %c";
 
-    function ReceiptPrintMode() {
+    function ReceiptPrintMode(cfg, switcher, receiptData) {
       this.findReceipt = bind(this.findReceipt, this);
       ReceiptPrintMode.__super__.constructor.apply(this, arguments);
       this.receipt = new PrintReceiptTable();
+      this.initialReceipt = receiptData;
     }
 
     ReceiptPrintMode.prototype.enter = function() {
       ReceiptPrintMode.__super__.enter.apply(this, arguments);
-      return this.cfg.uiRef.body.append(this.receipt.render());
+      this.cfg.uiRef.body.append(this.receipt.render());
+      if (this.initialReceipt) {
+        return this.renderReceipt(this.initialReceipt);
+      }
     };
 
     ReceiptPrintMode.prototype.glyph = function() {

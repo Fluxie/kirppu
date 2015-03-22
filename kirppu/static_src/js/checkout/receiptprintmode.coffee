@@ -5,13 +5,16 @@ class @ReceiptPrintMode extends CheckoutMode
   @strTitle: "Find receipt"
   @strSell: "%d, served by %c"
 
-  constructor: () ->
+  constructor: (cfg, switcher, receiptData) ->
     super
     @receipt = new PrintReceiptTable()
+    @initialReceipt = receiptData
 
   enter: ->
     super
     @cfg.uiRef.body.append(@receipt.render())
+    if @initialReceipt
+        @renderReceipt(@initialReceipt)
 
   glyph: -> "list-alt"
   title: -> @constructor.strTitle
