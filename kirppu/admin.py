@@ -15,7 +15,7 @@ from .forms import (
     VendorSetSelfForm,
 )
 
-from .models import Clerk, Item, Vendor, Counter, Receipt, ReceiptItem, UIText, ItemStateLog
+from .models import Clerk, Item, Vendor, Counter, Receipt, ReceiptItem, UIText, ItemStateLog, Box
 
 __author__ = 'jyrkila'
 
@@ -234,3 +234,4 @@ class ItemStateLogAdmin(admin.ModelAdmin):
 
 admin.site.register(ItemStateLog, ItemStateLogAdmin)
 
+admin.site.register(Box)

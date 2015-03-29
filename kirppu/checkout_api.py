@@ -334,7 +334,7 @@ def item_edit(request, code, price, state):
 
 @ajax_func('^item/list$', method='GET')
 def item_list(request, vendor):
-    items = Item.objects.filter(vendor__id=vendor)
+    items = Item.objects.filter(vendor__id=vendor).filter(box__isnull=True)
     return map(lambda i: i.as_dict(), items)
 
 

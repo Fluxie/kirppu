@@ -162,7 +162,7 @@ def item_hide(request, code):
 @require_http_methods(['POST'])
 def item_to_not_printed(request, code):
     vendor = Vendor.get_vendor(request.user)
-    item = get_object_or_404(Item.objects, code=code, vendor=vendor)
+    item = get_object_or_404(Item.objects, code=code, vendor=vendor, box__isnull=True)
 
     if settings.KIRPPU_COPY_ITEM_WHEN_UNPRINTED:
         # Create a duplicate of the item with a new code and hide the old item.
@@ -203,7 +203,7 @@ def item_to_not_printed(request, code):
 @require_http_methods(["POST"])
 def item_to_printed(request, code):
     vendor = Vendor.get_vendor(request.user)
-    item = get_object_or_404(Item.objects, code=code, vendor=vendor)
+    item = get_object_or_404(Item.objects, code=code, vendor=vendor, box__isnull=True)
 
     item.printed = True
     item.save()
@@ -221,7 +221,7 @@ def item_update_price(request, code):
         return HttpResponseBadRequest(u' '.join(error.messages))
 
     vendor = Vendor.get_vendor(request.user)
-    item = get_object_or_404(Item.objects, code=code, vendor=vendor)
+    item = get_object_or_404(Item.objects, code=code, vendor=vendor, box__isnull=True)
 
     if item.is_locked():
         return HttpResponseBadRequest("Item has been brought to event. Price can't be changed.")
@@ -268,7 +268,7 @@ def item_update_type(request, code):
 @require_http_methods(["POST"])
 def all_to_print(request):
     vendor = Vendor.get_vendor(request.user)
-    items = Item.objects.filter(vendor=vendor).filter(printed=False)
+    items = Item.objects.filter(vendor=vendor).filter(printed=False).filter(box__isnull=True)
 
     items.update(printed=True)
 
@@ -327,7 +327,7 @@ def get_items(request, bar_type):
         return HttpResponseBadRequest(u"Tag type not supported")
 
     vendor = Vendor.get_vendor(user)
-    vendor_items = Item.objects.filter(vendor=vendor, hidden=False)
+    vendor_items = Item.objects.filter(vendor=vendor, hidden=False, box__isnull=True )
     items = vendor_items.filter(printed=False)
     printed_items = vendor_items.filter(printed=True)
 
@@ -616,7 +616,7 @@ def vendor_view(request):
 
     if user.is_authenticated():
         vendor = Vendor.get_vendor(user)
-        items = Item.objects.filter(vendor=vendor, hidden=False)
+        items = Item.objects.filter(vendor=vendor, hidden=False, box__isnull=True)
     else:
         items = []
 
