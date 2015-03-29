@@ -212,6 +212,33 @@ def validate_positive(value):
         raise ValidationError(_(u"Value cannot be negative"))
 
 
+class Box(models.Model):
+    description = models.CharField(max_length=256)
+
+    def __unicode__(self):
+        return u"{id} ({description})".format(id=self.id, description=self.description)
+
+    def get_vendor(self):
+        """
+        Gets the vendor of the box
+
+        :return: Vendor
+        :rtype: Decimal
+        """
+        first_item = Item.objects.filter(box=self.id).all()[:1]
+        return first_item.vendor
+
+    def get_items(self):
+        """
+        Gets items in the box that are not hidden.
+
+        :return: List of Item of objects
+        :rtype: Array
+        """
+        items = Item.objects.filter(box=self.id).exclude(hidden=True).all()
+        return items
+
+
 class Item(models.Model):
     ADVERTISED = "AD"
     BROUGHT = "BR"
@@ -315,6 +342,7 @@ class Item(models.Model):
     printed = models.BooleanField(default=False)
     # Affects whether the item is shown at all.
     hidden = models.BooleanField(default=False)
+    box = models.ForeignKey(Box, blank=True, null=True)
 
     def __unicode__(self):
         return u"{name} ({code})".format(name=self.name, code=self.code)

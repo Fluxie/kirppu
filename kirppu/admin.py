@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.utils.translation import ugettext
 from django.contrib import messages
 from .forms import ClerkGenerationForm, ReceiptItemAdminForm, ReceiptAdminForm, UITextForm
-from .models import Clerk, Item, Vendor, Counter, Receipt, ReceiptItem, UIText
+from .models import Clerk, Item, Vendor, Counter, Receipt, ReceiptItem, UIText, Box
 
 __author__ = 'jyrkila'
 
@@ -150,3 +150,6 @@ class ReceiptAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 admin.site.register(Receipt, ReceiptAdmin)
+
+
+admin.site.register(Box)

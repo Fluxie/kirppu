@@ -139,7 +139,7 @@ def item_add(request):
 @require_http_methods(['POST'])
 def item_to_not_printed(request, code):
     vendor = Vendor.get_vendor(request.user)
-    item = get_object_or_404(Item.objects, code=code, vendor=vendor)
+    item = get_object_or_404(Item.objects, code=code, vendor=vendor, box__isnull=True)
 
     if settings.KIRPPU_COPY_ITEM_WHEN_UNPRINTED:
         # Create a duplicate of the item with a new code and hide the old item.
@@ -173,7 +173,7 @@ def item_to_not_printed(request, code):
 @require_http_methods(["POST"])
 def item_to_printed(request, code):
     vendor = Vendor.get_vendor(request.user)
-    item = get_object_or_404(Item.objects, code=code, vendor=vendor)
+    item = get_object_or_404(Item.objects, code=code, vendor=vendor, box__isnull=True)
 
     item.printed = True
     item.save()
@@ -203,7 +203,7 @@ def item_update_price(request, code):
         return HttpResponseBadRequest("Price too high.")
 
     vendor = Vendor.get_vendor(request.user)
-    item = get_object_or_404(Item.objects, code=code, vendor=vendor)
+    item = get_object_or_404(Item.objects, code=code, vendor=vendor, box__isnull=True)
 
     if item.is_locked():
         return HttpResponseBadRequest("Item has been brought to event. Price can't be changed.")
@@ -250,7 +250,7 @@ def item_update_type(request, code):
 @require_http_methods(["POST"])
 def all_to_print(request):
     vendor = Vendor.get_vendor(request.user)
-    items = Item.objects.filter(vendor=vendor).filter(printed=False)
+    items = Item.objects.filter(vendor=vendor).filter(printed=False).filter(box__isnull=True)
 
     items.update(printed=True)
 
@@ -298,8 +298,8 @@ def get_items(request, bar_type):
         return HttpResponseBadRequest(u"Tag type not supported")
 
     vendor = Vendor.get_vendor(user)
-    items = Item.objects.filter(vendor=vendor).filter(printed=False)
-    printed_items = Item.objects.filter(vendor=vendor).filter(printed=True)
+    items = Item.objects.filter(vendor=vendor).filter(printed=False).filter(box__isnull=True)
+    printed_items = Item.objects.filter(vendor=vendor).filter(printed=True).filter(box__isnull=True)
     printed_items = printed_items.filter(hidden=False)
 
     # Order from newest to oldest, because that way new items are added
@@ -443,7 +443,7 @@ def vendor_view(request):
 
     if user.is_authenticated():
         vendor = Vendor.get_vendor(user)
-        items = Item.objects.filter(vendor=vendor)
+        items = Item.objects.filter(vendor=vendor).filter(box__isnull=True)
     else:
         items = []
 
