@@ -225,7 +225,7 @@ class Box(models.Model):
         :return: Vendor
         :rtype: Decimal
         """
-        first_item = Item.objects.filter(box=self.id).all()[:1]
+        first_item = self._get_first_item()
         return first_item.vendor
 
     def get_items(self):
@@ -237,6 +237,20 @@ class Box(models.Model):
         """
         items = Item.objects.filter(box=self.id).exclude(hidden=True).all()
         return items
+
+    def get_price_fmt(self):
+        """
+        Gets the price of the items in the box
+
+        :return: Price
+        :rtype: Decimal
+        """
+        first_item = self._get_first_item()
+        return first_item.price_fmt
+
+    def _get_first_item(self):
+        first_item = Item.objects.filter(box=self.id).all()[:1][0]
+        return first_item
 
 
 class Item(models.Model):

@@ -1,0 +1,13 @@
+{% load kirppu_tags %}{% load i18n %}
+
+    <div class="item_container" id="{{ id }}">
+        <div class="item_body">
+            <div class="item_name">{{ description }}</div>
+            <span class="item_price">{{ price }}</span>
+        </div>
+
+        <button class="item_button_delete" title="{% trans "Switch box between printed and not printed lists." %}" type="button"><span class="glyphicon glyphicon-sort"></span></button>
+        {% if tag_type != "list" %}
+            <button class="item_button_toggle" title="{% trans "Toggle size." %}" type="button"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
+        {% endif %}
+    </div>
