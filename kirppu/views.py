@@ -35,6 +35,7 @@ from . import ajax_util
 from .forms import ItemRemoveForm
 from .fields import ItemPriceField
 from .models import (
+    Box,
     Clerk,
     Item,
     Vendor,
@@ -293,6 +294,7 @@ def _vendor_menu_contents(request):
     items = [
         fill(_(u"Home"), "kirppu:vendor_view"),
         fill(_(u"Item list"), "kirppu:page"),
+        fill(_(u"Box list"), "kirppu:vendor_boxes"),
     ]
 
     manage_sub = []
@@ -350,6 +352,48 @@ def get_items(request, bar_type):
     }
 
     return render(request, "kirppu/app_items.html", render_params)
+
+
+@login_required
+@require_http_methods(["GET"])
+@barcode_view
+def get_boxes(request, bar_type):
+    """
+    Get a page containing all boxes for vendor.
+
+    :param request: HttpRequest object.
+    :type request: django.http.request.HttpRequest
+    :return: HttpResponse or HttpResponseBadRequest
+    """
+
+    user = request.user
+    if user.is_staff and "user" in request.GET:
+        user = get_object_or_404(get_user_model(), username=request.GET["user"])
+    tag_type = request.GET.get("tag", "short").lower()
+    if tag_type not in ('short', 'long'):
+        return HttpResponseBadRequest(u"Tag type not supported")
+
+    vendor = Vendor.get_vendor(user)
+    boxes = Box.objects.filter(item__vendor=vendor)
+    printed_boxes = Box.objects.filter(item__vendor=vendor).filter(item__printed=True)
+
+    # Order from newest to oldest, because that way new boxes are added
+    # to the top and the user immediately sees them without scrolling
+    # down.
+    boxes = boxes.order_by('-id')
+
+    render_params = {
+        'boxes': boxes,
+        'printed_boxes': printed_boxes,
+        'vendor_id_param': vendor.id,
+
+        'profile_url': settings.PROFILE_URL,
+
+        'is_registration_open': is_vendor_open(),
+        'menu': _vendor_menu_contents(request),
+    }
+
+    return render(request, "kirppu/app_boxes.html", render_params)
 
 
 def get_barcode(request, data, ext):
