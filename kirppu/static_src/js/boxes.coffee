@@ -118,6 +118,7 @@ onPriceChange = ->
 bindFormEvents = ->
   $('#box-add-form').bind('submit', ->
     addBox();
+    $('#box-add-form')[0].reset();
     return false;
   )
 
