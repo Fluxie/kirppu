@@ -5,7 +5,8 @@
             "name": "Superman comics #1",
             "price": "1",
             "state": "AD",
-            "vendor": 2
+            "vendor": 2,
+            "box": null
         },
         "model": "kirppu.item",
         "pk": 1
@@ -16,7 +17,8 @@
             "name": "Superman comics #2",
             "price": "0.2",
             "state": "AD",
-            "vendor": 2
+            "vendor": 2,
+            "box": null
         },
         "model": "kirppu.item",
         "pk": 2
@@ -27,7 +29,8 @@
             "name": "Superman comics #3",
             "price": "1.4",
             "state": "AD",
-            "vendor": 1
+            "vendor": 1,
+            "box": null
         },
         "model": "kirppu.item",
         "pk": 3
@@ -38,7 +41,8 @@
             "name": "Superman comics #4",
             "price": "1.99",
             "state": "AD",
-            "vendor": 1
+            "vendor": 1,
+            "box": null
         },
         "model": "kirppu.item",
         "pk": 4
@@ -49,7 +53,8 @@
             "name": "Batman strikes back",
             "price": "20",
             "state": "AD",
-            "vendor": 1
+            "vendor": 1,
+            "box": null
         },
         "model": "kirppu.item",
         "pk": 5
@@ -60,7 +65,8 @@
             "name": "Batman and secrets of the stone",
             "price": "19.99",
             "state": "AD",
-            "vendor": 1
+            "vendor": 1,
+            "box": null
         },
         "model": "kirppu.item",
         "pk": 6
