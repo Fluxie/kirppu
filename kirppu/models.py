@@ -316,7 +316,7 @@ class Box(models.Model):
                     name=generated_name,
                     price=kwargs["price"],
                     vendor=kwargs["vendor"],
-                    type=kwargs["type"],
+                    type="short",
                     state=kwargs["state"],
                     itemtype=kwargs["itemtype"],
                     adult=kwargs["adult"],
