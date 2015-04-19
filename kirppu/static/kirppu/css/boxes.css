@@ -13,7 +13,7 @@
  *      .box_head
  *          .box_head_price
  *      .box_body
- *          .box_name
+ *          .box_description
  *          .box_price
  *          .barcode_container
  *              .barcode_img
@@ -139,23 +139,23 @@
     transform:  scale(2) rotate(-90deg) translate(-100%, 0);
 }
 
-.box_name {
+.box_description {
     width: 8.7cm;
     height: 2em;
     margin: 2px; /* Compensate for border not being there for locked items */
 }
 
 @media screen, projection, handheld {
-    .box_editable .box_name {
+    .box_editable .box_description
         margin: 0px;
         border: 2px inset;
     }
 }
 
-.box_tiny .box_name {
+.box_tiny .box_description {
     width: 5.5cm;
 }
-.box_list .box_name {
+.box_list .box_description {
     position: absolute;
     border: none;
     margin: 0px;
@@ -277,7 +277,7 @@ a.box_button_printed {
         background-color: white !important;
     }
 
-    .box_price, .box_name {
+    .box_price, .box_description {
         border: none;
     }
     .box_container > button {
@@ -311,7 +311,7 @@ a.box_button_printed {
     }
 
     /* Hide item name placeholder. */
-    div.box_name > em {
+    div.box_description > em {
         display: none;
     }
 }

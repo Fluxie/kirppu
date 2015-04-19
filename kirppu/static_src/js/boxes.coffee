@@ -16,7 +16,7 @@ class BoxesConfig
 C = new BoxesConfig
 
 
-createBox = (name, price, vendor_id, code, dataurl, type, adult) ->
+createBox = (description, item_title, count, price, vendor_id, code, dataurl, type, adult) ->
   # Find the hidden template element, clone it and replace the contents.
   tag = $(".box_template").clone();
   tag.removeClass("box_template");
@@ -24,7 +24,10 @@ createBox = (name, price, vendor_id, code, dataurl, type, adult) ->
   if (type == "short") then tag.addClass("box_short")
   if (type == "tiny") then tag.addClass("box_tiny")
 
-  $('.box_name', tag).text(name)
+  $('.box_description', tag).text(description)
+  $('.box_count', tag).text(count)
+
+  $('.box_item_title', tag).text(item_Title)
   $('.box_price', tag).text(price)
   $('.box_head_price', tag).text(price)
 
@@ -60,10 +63,10 @@ addBox = ->
       $('<p>' + jqXHR.responseText + '</p>').appendTo($('#form-errors'))
 
   content =
-    name: $("#box-add-name").val()
-    price: $("#box-add-price").val()
+    description: $("#box-add-description").val()
+    item_title: $("#box-add-itemtitle").val()
     count: $("#box-add-count").val()
-    type: $("input[name=count-add-type]:checked").val()
+    price: $("#box-add-price").val()
     itemtype: $("#box-add-itemtype").val()
     adult: $("input[name=box-add-adult]:checked").val()
 

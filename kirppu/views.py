@@ -280,10 +280,10 @@ def all_to_print(request):
 @require_vendor_open
 def box_add(request):
     vendor = Vendor.get_vendor(request.user)
-    description = request.POST.get("name", u"").strip()
-    price = request.POST.get("price")
-    tag_type = request.POST.get("type", "short")
+    description = request.POST.get("description", u"").strip()
+    item_title = request.POST.get("item_title", "uu").strip()
     count_str = request.POST.get("count", u"")
+    price = request.POST.get("price")
     item_type = request.POST.get("itemtype", u"")
     adult = request.POST.get("adult", "no")
 
@@ -313,10 +313,9 @@ def box_add(request):
     box = Box.new(
         description=description,
         count=count,
-        item_title=description,
+        item_title=item_title,
         price=str(price),
         vendor=vendor,
-        type=tag_type,
         state=Item.ADVERTISED,
         itemtype=item_type,
         adult=adult)
