@@ -279,8 +279,55 @@ def all_to_print(request):
 @require_http_methods(["POST"])
 @require_vendor_open
 def box_add(request):
+    vendor = Vendor.get_vendor(request.user)
+    description = request.POST.get("name", u"").strip()
+    price = request.POST.get("price")
+    tag_type = request.POST.get("type", "short")
+    count_str = request.POST.get("count", u"")
+    item_type = request.POST.get("itemtype", u"")
+    adult = request.POST.get("adult", "no")
 
-    return HttpResponse()
+    if not item_type:
+        return HttpResponseBadRequest(_(u"Item must have a type."))
+
+    # Format price
+    try:
+        price = ItemPriceField().clean(price)
+    except ValidationError as error:
+        return HttpResponseBadRequest(u' '.join(error.messages))
+
+    # Verify that user doesn't exceed his/hers item quota with the box.
+    response = []
+    max_items = settings.KIRPPU_MAX_ITEMS_PER_VENDOR
+    item_cnt = Item.objects.filter(vendor=vendor).count()
+    count = int(count_str)
+    if item_cnt >= max_items:
+        error_msg = _(u"You have %(max_items)s items, which is the maximum. No more items can be registered.")
+        return HttpResponseBadRequest(error_msg % {'max_items': max_items})
+    elif max_items < count + item_cnt:
+        error_msg = _(u"You have %(item_cnt)s items. "
+                      u"Creating this box would cause the items to exceed the maximum number of allowed items.")
+        return HttpResponseBadRequest(error_msg % {'max_items': max_items})
+
+    # Create the box and items. and construct a response containing box and all the items that have been added.
+    box = Box.new(
+        description=description,
+        count=count,
+        item_title=description,
+        price=str(price),
+        vendor=vendor,
+        type=tag_type,
+        state=Item.ADVERTISED,
+        itemtype=item_type,
+        adult=adult)
+
+    box_dict = {
+        'vendor_id': vendor.id,
+        'box_id': box.id
+    }
+    response.append(box_dict)
+
+    return HttpResponse(json.dumps(response), 'application/json')
 
 
 def _vendor_menu_contents(request):
@@ -336,7 +383,7 @@ def get_items(request, bar_type):
         return HttpResponseBadRequest(u"Tag type not supported")
 
     vendor = Vendor.get_vendor(user)
-    vendor_items = Item.objects.filter(vendor=vendor, hidden=False, box__isnull=True )
+    vendor_items = Item.objects.filter(vendor=vendor, hidden=False, box__isnull=True)
     items = vendor_items.filter(printed=False)
     printed_items = vendor_items.filter(printed=True)
 
@@ -676,7 +723,7 @@ def vendor_view(request):
         'items': items,
 
         'total_price': sum(i.price for i in items),
-        'num_total':   len(items),
+        'num_total': len(items),
         'num_printed': len(filter(lambda i: i.printed, items)),
 
         'profile_url': settings.PROFILE_URL,
