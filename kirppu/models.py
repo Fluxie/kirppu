@@ -285,6 +285,22 @@ class Box(models.Model):
         first_item = Item.objects.filter(box=self.id).all()[:1][0]
         return first_item
 
+    @classmethod
+    def new(cls, *args, **kwargs):
+        """
+        Construct new Item and generate its barcode.
+
+        :param args: Item Constructor arguments
+        :param kwargs: Item Constructor arguments
+        :return: New stored Item object with calculated code.
+        :rtype: Item
+        """
+        obj = cls(*args, **kwargs)
+        obj.full_clean()
+        obj.save()
+
+        return obj
+
 
 class Item(models.Model):
     ADVERTISED = "AD"
