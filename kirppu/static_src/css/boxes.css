@@ -1,0 +1,315 @@
+/* ================ 1: price_tags.css ================ */
+
+#box-add-form {
+    width: 19cm;
+}
+
+/**
+ * Hierarchy for box_container entities.
+ *
+ *  .box_container
+ *      .box_head
+ *          .box_head_price
+ *      .box_body
+ *          .box_name
+ *          .box_price
+ *          .barcode_container
+ *              .barcode_img
+ *              .box_extra_code
+ *          .box_adult_tag
+ *          .box_vendor_id
+ *
+ *      .box_button_hide
+ *      .box_button_printed
+ *      .box_button_toggle
+ */
+#boxes, #printed_boxes {
+    width: 19cm;
+    float: left;
+    clear: left;
+}
+.box_template {
+    display: none;
+}
+.box_container {
+    border: 1px solid black;
+    width: 99.9%;
+    height: 3.62cm;
+    float: left;
+    padding: 0.1cm;
+    position: relative; /* Needed for absolute positioning of child elements. */
+    transition: width 0.2s;
+}
+.box_short {
+    width: 49.95%;
+}
+.box_tiny {
+    width: 33.3%;
+}
+.box_list {
+    height: 2em;
+    width: 99.9%;
+}
+#printed_boxes > .box_container {
+    background-color: lightgrey;
+}
+
+.box_head {
+    float: left;
+    width: 2cm;
+}
+.box_short .box_head {
+    display: none;
+}
+.box_tiny .box_head {
+    display: none;
+}
+.box_list .box_head {
+    display: none;
+}
+.box_body {
+    float: left;
+    width: 9.3cm;
+    position: relative; /* Needed for absolute positioning of child elements. */
+}
+.box_short .box_body {
+    width: 100%;
+}
+.box_tiny .box_body {
+    width: 100%;
+}
+.box_list .box_body {
+    width: 100%;
+}
+
+.box_price {
+    width: 2.5cm;
+    font-size: 150%;
+    margin-top: 3px;
+    margin: 2px; /* Compensate for border not being there for locked items */
+}
+
+@media screen, projection, handheld {
+    .box_editable .box_price {
+        margin: 0px;
+        border: 2px inset;
+    }
+}
+
+.box_list .box_price {
+    border: none;
+    margin: 0px;
+    margin-top: 0px;
+    font-size: 100%;
+}
+.box_price:after {
+    content:" \20AC"; /* euro */
+}
+.box_head_price:after {
+    content:" \20AC"; /* euro */
+}
+
+/* Price tag edit forms. */
+.box_editable .box_body form {
+    display: inline;
+}
+.box_editable .box_body form input {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.box_head_price {
+    font-size: 100%;
+    width: 1.5cm; /* Width of price before scaling. */
+    text-align: center;
+    display: inline-block;
+
+    /* Rotate and scale the price tag. Order of operations matters.
+     * 1. Translate left by width of this element, so top-right
+     *    corner of price is on the top-left corner of price tag.
+     * 2. Rotate the price so it's sideways.
+     * 3. Scale the price by (tag height) / (price width) so it's
+     *    centered correctly.
+     */
+    transform-origin: left top;
+    transform:  scale(2) rotate(-90deg) translate(-100%, 0);
+}
+
+.box_name {
+    width: 8.7cm;
+    height: 2em;
+    margin: 2px; /* Compensate for border not being there for locked items */
+}
+
+@media screen, projection, handheld {
+    .box_editable .box_name {
+        margin: 0px;
+        border: 2px inset;
+    }
+}
+
+.box_tiny .box_name {
+    width: 5.5cm;
+}
+.box_list .box_name {
+    position: absolute;
+    border: none;
+    margin: 0px;
+    width: 100%;
+    left: 1.5cm;
+}
+
+/* This container is for centering the barcode text on the barcode.
+   So it should be the same size or bigger than the barcode img. */
+.barcode_container {
+    left: 0cm;
+    width: 286px;
+}
+.box_short .barcode_container {
+    margin-left: auto;
+    margin-right: auto;
+}
+.box_tiny .barcode_container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 143px;
+}
+.box_list .barcode_container {
+    display: none;
+}
+.barcode_img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 286px;
+    height: 1.4cm;
+    image-rendering: -moz-crisp-edges;         /* Firefox */
+    image-rendering:   -o-crisp-edges;         /* Opera */
+    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+}
+.box_tiny .barcode_img {
+    width: 143px;
+}
+
+.box_adult_tag {
+    position: absolute;
+    top: 1cm;
+    left: 1.75cm;
+    font-weight: bold;
+}
+.box_list .box_adult_tag {
+    display: none;
+}
+
+.box_vendor_id {
+    position: absolute;
+    top: 1cm;
+    left: 3cm;
+}
+.box_list .box_vendor_id {
+    display: none;
+}
+.box_vendor_id:before {
+    content: 'Vendor: '
+}
+.box_extra_code {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80px;
+    margin-top: -0.25cm;
+    background-color: white;
+    text-align: center;
+}
+
+
+.box_button_printed, .box_button_toggle, .box_button_hide {
+    position: absolute;
+    right: 0px;
+    width: 1.5em;
+    height: 1.5em;
+    padding: 0px;
+    font-size:14px;
+    font-weight:bold;
+}
+.box_button_hide {
+    top: 0em;
+}
+.box_list .box_button_printed {
+    top: 0em;
+    right: 0em;
+}
+.box_button_printed {
+    top: 1.5em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.box_list .box_button_printed {
+    top: 0em;
+    right: 1.5em;
+}
+.box_button_toggle {
+    top: 3em;
+}
+.box_list .box_button_toggle {
+    display: none;
+}
+a.box_button_printed {
+    position: absolute; width:20px;
+    background-color: #FFF; color: black;
+    border-radius: 20px;
+    padding-left: 3px; padding-top: 1px;
+    cursor:pointer; z-index: -1;
+    font-size:16px; font-weight:bold;
+}
+.box_button_printed:disabled {
+    border: 1px dashed darkgrey;
+}
+
+@media print {
+    .box_extra_code {
+        background-color: white !important;
+    }
+
+    .box_price, .box_name {
+        border: none;
+    }
+    .box_container > button {
+        display: none;
+    }
+    #box-add-form {
+        display: none;
+    }
+    #printed_boxes, .box_list {
+        display: none;
+    }
+    .box_container {
+        page-break-inside: avoid;
+    }
+
+    @page
+    {
+        /* this affects the margin in the printer settings */
+        margin: 1cm 1cm;
+    }
+
+    body
+    {
+        /* this affects the margin on the content before sending to printer */
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #boxes {
+        width: 100%;
+    }
+
+    /* Hide item name placeholder. */
+    div.box_name > em {
+        display: none;
+    }
+}

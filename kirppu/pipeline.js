@@ -19,6 +19,12 @@ module.exports.css = {
         ],
         "output_filename": "price_tags.css",
     },
+    'boxes': {
+        "source_filenames": [
+            "css/boxes.css",
+        ],
+        "output_filename": "boxes.css",
+    },
     'checkout': {
         "source_filenames": [
             "css/checkout.css",

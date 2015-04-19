@@ -5,7 +5,7 @@
 {% block head %}
 
     <link href="{% static "kirppu/css/general.css" %}" rel="stylesheet">
-    <link href="{% static "kirppu/css/price_tags.css" %}" rel="stylesheet">
+    <link href="{% static "kirppu/css/boxes.css" %}" rel="stylesheet">
     <script src="{% static "kirppu/js/general.js" %}"></script>
     <script src="{% static "kirppu/js/jeditable.js" %}"></script>
     <script src="{% static "kirppu/js/price_tags.js" %}"></script>
@@ -99,7 +99,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-1 col-sm-11">
                         <div id="form-errors" class="text-danger"></div>
-                        <button id="add_short_item" type="submit" class="btn btn-primary">{% trans "Add item" %}</button>
+                        <button id="add_short_box" type="submit" class="btn btn-primary">{% trans "Add box" %}</button>
                     </div>
                 </div>
             </div>
@@ -116,17 +116,17 @@
         </div>
     </form>
 
-    {# Output a single item_container as a template for javascript. #}
+    {# Output a single box_container as a template for javascript. #}
     {% include 'kirppu/app_boxes_box.html' with tag_type="template" name="" price="0" code="" vendor_id="" adult="" locked=False %}
 
     <div id="boxes">
-        {# Output a template container for every non-printed item user has. #}
+        {# Output a template container for every non-printed box user has. #}
         {% for b in boxes %}
             {% include 'kirppu/app_boxes_box.html' with id=b.id description=b.description price=b.get_price_fmt  %}
         {% endfor %}
     </div>
     <div style="margin-top: 1cm" id="printed_boxes">
-        {# Output a template container for every printed item user has. #}
+        {# Output a template container for every printed box user has. #}
         {% for b in printed_boxes %}
             {% include 'kirppu/app_boxes_box.html' with id=b.id description=b.description price=b.get_price_fmt %}
         {% endfor %}
