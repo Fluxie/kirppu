@@ -275,6 +275,13 @@ def all_to_print(request):
 
     return HttpResponse()
 
+@login_required
+@require_http_methods(["POST"])
+@require_vendor_open
+def box_add(request):
+
+    return HttpResponse()
+
 
 def _vendor_menu_contents(request):
     """

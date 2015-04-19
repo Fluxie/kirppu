@@ -8,7 +8,7 @@
     <link href="{% static "kirppu/css/boxes.css" %}" rel="stylesheet">
     <script src="{% static "kirppu/js/general.js" %}"></script>
     <script src="{% static "kirppu/js/jeditable.js" %}"></script>
-    <script src="{% static "kirppu/js/price_tags.js" %}"></script>
+    <script src="{% static "kirppu/js/boxes.js" %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -134,4 +134,20 @@
 {% endblock %}
 
 {% block tail %}
+
+    <script>
+        boxesConfig.url_args.code = '__placeholder__';
+        boxesConfig.urls.box_add = "{% url 'kirppu:box_add' %}";
+        boxesConfig.urls.roller = "{% static "img/roller.gif" %}";
+        {% if not is_registration_open %}boxesConfig.enabled = false;{% endif %}
+
+        $(document).ready(function() {
+            setupAjax();
+
+            bindFormEvents();
+
+            // bindTagEvents($('#boxs > .box_editable'));
+            // bindListTagEvents($('#printed_boxs > .box_container'));
+        });
+    </script>
 {% endblock %}
