@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum
+from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from django.utils.module_loading import import_by_path
 from django.conf import settings
@@ -295,9 +296,32 @@ class Box(models.Model):
         :return: New stored Item object with calculated code.
         :rtype: Item
         """
-        obj = cls(*args, **kwargs)
-        obj.full_clean()
-        obj.save()
+        def generate_item_name(item_title_in, id):
+            item_name = u"{0} #{1}".format(item_title_in, id)
+            return item_name
+
+        with transaction.atomic():
+            obj = cls(*args,
+                      description=kwargs["description"]
+                      )
+            obj.full_clean()
+            obj.save()
+
+            # Create items for the box.
+            count = kwargs["count"]
+            item_title = kwargs["item_title"]
+            for i in range(0, count):
+                generated_name = generate_item_name(item_title, i + 1)
+                item = Item.new(
+                    name=generated_name,
+                    price=kwargs["price"],
+                    vendor=kwargs["vendor"],
+                    type=kwargs["type"],
+                    state=kwargs["state"],
+                    itemtype=kwargs["itemtype"],
+                    adult=kwargs["adult"],
+                    box=obj
+                )
 
         return obj
 
