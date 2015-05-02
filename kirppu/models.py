@@ -247,7 +247,9 @@ def validate_positive(value):
 
 
 class Box(models.Model):
+
     description = models.CharField(max_length=256)
+    _representative_item = None
 
     def __unicode__(self):
         return u"{id} ({description})".format(id=self.id, description=self.description)
@@ -259,7 +261,7 @@ class Box(models.Model):
         :return: Vendor
         :rtype: Decimal
         """
-        first_item = self._get_first_item()
+        first_item = self._get_representative_item()
         return first_item.vendor
 
     def get_items(self):
@@ -279,12 +281,76 @@ class Box(models.Model):
         :return: Price
         :rtype: Decimal
         """
-        first_item = self._get_first_item()
+        first_item = self._get_representative_item()
         return first_item.price_fmt
 
-    def _get_first_item(self):
-        first_item = Item.objects.filter(box=self.id).all()[:1][0]
-        return first_item
+    def get_price_of_item(self):
+        """
+        Gets the price of the items in the box
+
+        :return: Price
+        :rtype: Decimal
+        """
+        first_item = self._get_representative_item()
+        return first_item.price_fmt
+
+    def get_item_count(self):
+        """
+        Gets the number of items in the box.
+
+        :return: Number of items in the box.
+        :rtype: Decimal
+        """
+        item_count = Item.objects.filter(box=self.id).exclude(hidden=True).count()
+        return item_count
+
+    def get_item_type(self):
+        """
+        Gets the type of the items in the box.
+
+        :return: Number of items in the box.
+        :rtype: Decimal
+        """
+        first_item = self._get_representative_item()
+        return first_item.itemtype
+
+    def get_item_type_for_display(self):
+        """
+        Gets the type of the items in the box for display purpose
+
+        :return: Number of items in the box.
+        :rtype: Decimal
+        """
+        first_item = self._get_representative_item()
+        return first_item.get_itemtype_display()
+
+    def get_item_adult(self):
+        """
+        Gets the adult status of the items in the box
+
+        :return: Number of items in the box.
+        :rtype: Decimal
+        """
+        first_item = self._get_representative_item()
+        return first_item.adult
+
+    def is_hidden(self):
+        """
+        Checks if this box is hidden.
+
+        The box is hidden if all the items within the box are hidden.
+
+        :return: True if the box is hidden
+        :rtype: Boolean
+        """
+        visible_item_count = Item.objects.filter(box=self.id).exclude(hidden=False).count()
+        return visible_item_count == 0
+
+
+    def _get_representative_item(self):
+        if self._representative_item is None:
+            self._representative_item = Item.objects.filter(box=self.id).all()[:1][0]
+        return self._representative_item
 
     @classmethod
     def new(cls, *args, **kwargs):

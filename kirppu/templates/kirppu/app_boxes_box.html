@@ -1,13 +1,35 @@
 {% load kirppu_tags %}{% load i18n %}
 
-    <div class="box_container box_{{ tag_type }} {{ locked|yesno:',box_editable' }}" id="{{ code }}">
-        <div class="box_body">
-            <div class="box_description">{{ description }}</div>
-            <span class="box_price">{{ price }}</span>
-        </div>
+    <div class="box_container box_{{ box_type }} {{ locked|yesno:',box_editable' }}" id="{{ box_id }}">
 
-        <button class="box_button_delete" title="{% trans "Switch box between printed and not printed lists." %}" type="button"><span class="glyphicon glyphicon-sort"></span></button>
-        {% if tag_type != "list" %}
-            <button class="box_button_toggle" title="{% trans "Toggle size." %}" type="button"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
-        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title box_description">{{ description }}</h3>
+                <button class="box_button_hide" title="{% trans "Permanently remove the box." %}" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+            <div class="panel-body container">
+                <div class="row">
+                    <div class="col-sm-1">{% trans "Items #:" %}</div>
+                    <div class="col-sm-1 item_count">{{ item_count }}</div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1">{% trans "Type:" %}</div>
+                    <div class="col-sm-4 item_type">{{ item_type }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-1">{% trans "Price:" %}</div>
+                    <div class="col-sm-1 item_price">{{ price }}</div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1">{% trans "Adult:" %}</div>
+                    {% if item_adult == "yes" %}
+                        <div class="col-sm-1 item_adult">K-18</div>
+                    {% else %}
+                        <div class="col-sm-1 item_adult">-</div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                     <div class="col-sm-6"></div>
+                     <div class="col-sm-1"><button id="print_box" type="button" class="btn btn-default btn-sm btn-block">{% trans "Print" %}</button></div>
+                </div>
+            </div>
+        </div>
     </div>

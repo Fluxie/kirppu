@@ -34,19 +34,11 @@
     display: none;
 }
 .box_container {
-    border: 1px solid black;
     width: 99.9%;
-    height: 3.62cm;
     float: left;
     padding: 0.1cm;
     position: relative; /* Needed for absolute positioning of child elements. */
     transition: width 0.2s;
-}
-.box_short {
-    width: 49.95%;
-}
-.box_tiny {
-    width: 33.3%;
 }
 .box_list {
     height: 2em;
@@ -240,7 +232,8 @@
     font-weight:bold;
 }
 .box_button_hide {
-    top: 0em;
+    top: 1em;
+    right: 1em;
 }
 .box_list .box_button_printed {
     top: 0em;

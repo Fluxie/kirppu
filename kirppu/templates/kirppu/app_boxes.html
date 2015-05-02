@@ -101,25 +101,24 @@
     <form id="box-add-form" method="POST" class="form-horizontal">
         <div class="form-group">
             <div class="col-sm-12">
-                <button id="list_view" type="button" class="btn btn-default">{% trans "Toggle List View" %}</button>
                 <button id="delete_all" type="button" class="btn btn-default">{% trans "Mark all as printed" %}</button>
             </div>
         </div>
     </form>
 
     {# Output a single box_container as a template for javascript. #}
-    {% include 'kirppu/app_boxes_box.html' with tag_type="template" name="" price="0" code="" vendor_id="" adult="" locked=False %}
+    {% include 'kirppu/app_boxes_box.html' with box_type="template" description="" price="0" id="" vendor_id="" adult="" locked=False %}
 
     <div id="boxes">
         {# Output a template container for every non-printed box user has. #}
         {% for b in boxes %}
-            {% include 'kirppu/app_boxes_box.html' with id=b.id description=b.description price=b.get_price_fmt  %}
+            {% include 'kirppu/app_boxes_box.html' with box_type="normal" box_id=b.id description=b.description price=b.get_price_fmt item_count=b.get_item_count item_type=b.get_item_type_for_display item_adult=b.get_item_adult %}
         {% endfor %}
     </div>
     <div style="margin-top: 1cm" id="printed_boxes">
         {# Output a template container for every printed box user has. #}
         {% for b in printed_boxes %}
-            {% include 'kirppu/app_boxes_box.html' with id=b.id description=b.description price=b.get_price_fmt %}
+            {% include 'kirppu/app_boxes_box.html' with id=b.id description=b.description price=b.get_price_fmt item_count=b.get_item_count %}
         {% endfor %}
     </div>
 {% endblock %}
@@ -127,8 +126,9 @@
 {% block tail %}
 
     <script>
-        boxesConfig.url_args.code = '__placeholder__';
+        boxesConfig.url_args.box_id = '__placeholder__';
         boxesConfig.urls.box_add = "{% url 'kirppu:box_add' %}";
+        boxesConfig.urls.box_hide = "{% url 'kirppu:box_hide' '__placeholder__' %}";
         boxesConfig.urls.roller = "{% static "img/roller.gif" %}";
         {% if not is_registration_open %}boxesConfig.enabled = false;{% endif %}
 
@@ -137,7 +137,7 @@
 
             bindFormEvents();
 
-            // bindTagEvents($('#boxes > .box_editable'));
+            bindBoxEvents($('#boxes > .box_editable'));
             // bindListTagEvents($('#printed_boxs > .box_container'));
         });
     </script>

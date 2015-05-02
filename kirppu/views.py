@@ -13,12 +13,14 @@ from django.core.exceptions import (
 )
 import django.core.urlresolvers as url
 from django.db.models import Sum
+from django.db import transaction
 from django.http.response import (
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseForbidden,
     HttpResponseRedirect,
 )
+from django.http import Http404
 from django.shortcuts import (
     redirect,
     render,
@@ -297,7 +299,6 @@ def box_add(request):
         return HttpResponseBadRequest(u' '.join(error.messages))
 
     # Verify that user doesn't exceed his/hers item quota with the box.
-    response = []
     max_items = settings.KIRPPU_MAX_ITEMS_PER_VENDOR
     item_cnt = Item.objects.filter(vendor=vendor).count()
     count = int(count_str)
@@ -322,11 +323,36 @@ def box_add(request):
 
     box_dict = {
         'vendor_id': vendor.id,
-        'box_id': box.id
+        'box_id': box.id,
+        'description': box.description,
+        'item_price': str(box.get_price_fmt()),
+        'item_count': box.get_item_count(),
+        'item_type': box.get_item_type_for_display(),
+        'item_adult': box.get_item_adult()
     }
-    response.append(box_dict)
+    response = box_dict
 
     return HttpResponse(json.dumps(response), 'application/json')
+
+
+@login_required
+@require_http_methods(["POST"])
+def box_hide(request, box_id):
+
+    with transaction.atomic():
+
+        vendor = Vendor.get_vendor(request.user)
+        box = get_object_or_404(Box.objects, id=box_id)
+        box_vendor = box.get_vendor()
+        if box_vendor.id != vendor.id:
+            raise Http404()
+
+        items = box.get_items()
+        for item in items:
+            item.hidden = True
+            item.save()
+
+    return HttpResponse()
 
 
 def _vendor_menu_contents(request):
@@ -427,8 +453,8 @@ def get_boxes(request, bar_type):
         return HttpResponseBadRequest(u"Tag type not supported")
 
     vendor = Vendor.get_vendor(user)
-    boxes = Box.objects.filter(item__vendor=vendor)
-    printed_boxes = Box.objects.filter(item__vendor=vendor).filter(item__printed=True)
+    boxes = Box.objects.filter(item__vendor=vendor, item__hidden=False).distinct()
+    printed_boxes = Box.objects.filter(item__vendor=vendor, item__hidden=False, item__printed=True).distinct()
 
     # Order from newest to oldest, because that way new boxes are added
     # to the top and the user immediately sees them without scrolling

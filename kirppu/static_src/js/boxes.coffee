@@ -3,59 +3,52 @@ class BoxesConfig
   url_args:
     # This is used to move urls with arguments from django to JS.
     # It has to satisfy the regexp of the url in django.
-    code: ''
+    box_id: ''
 
   urls:
     roller: ''
     box_add: ''
+    box_hide: ''
 
   enabled: true
 
   constructor: ->
 
+  box_hide_url: (box_id) ->
+    url = @urls.box_hide
+    return url.replace(@url_args.box_id, box_id)
+
 C = new BoxesConfig
 
 
-createBox = (description, item_title, count, price, vendor_id, code, dataurl, type, adult) ->
+createBox = (description, item_count, item_price, vendor_id, item_type, item_adult) ->
   # Find the hidden template element, clone it and replace the contents.
-  tag = $(".box_template").clone();
-  tag.removeClass("box_template");
+  box = $(".box_template").clone();
+  box.removeClass("box_template");
+  box.addClass("box_short")
 
-  if (type == "short") then tag.addClass("box_short")
-  if (type == "tiny") then tag.addClass("box_tiny")
+  $('.box_description', box).text(description)
+  $('.item_count', box).text(item_count)
+  $('.item_price', box).text(item_price)
+  $('.item_type', box).text(item_type)
 
-  $('.box_description', tag).text(description)
-  $('.box_count', tag).text(count)
+  if item_adult == "yes"
+    $('.item_adult', box).text("K-18")
+  else
+    $('.item_adult', box).text("-")
 
-  $('.box_item_title', tag).text(item_Title)
-  $('.box_price', tag).text(price)
-  $('.box_head_price', tag).text(price)
+  $('.box_vendor_id', box).text(vendor_id)
 
-  if adult == "yes"
-    $('.box_adult_tag', tag).text("K-18")
-
-  $('.box_vendor_id', tag).text(vendor_id)
-
-  $(tag).attr('id', code)
-  $('.box_extra_code', tag).text(code)
-
-  $('.barcode_container > img', tag).attr('src', dataurl)
+  return box
 
 
-  if listViewIsOn
-    tag.addClass('box_list')
-
-  return tag
-
-
-# Add a bx with name and price set to form contents.
+# Add a box with name and price set to form contents.
 addBox = ->
-  onSuccess = (items) ->
+  onSuccess = (box) ->
     $('#form-errors').empty()
-    for item in items
-      tag = createTag(item.name, item.price, item.vendor_id, item.code, item.barcode_dataurl, item.type, item.adult)
-      $('#boxes').prepend(tag)
-      bindTagEvents($(tag))
+    box = createBox(box.description, box.item_count, box.item_price, box.vendor_id, box.item_type, box.item_adult)
+    $('#boxes').prepend(box)
+    bindBoxEvents($(box))
 
   onError = (jqXHR, textStatus, errorThrown) ->
     $('#form-errors').empty()
@@ -83,16 +76,16 @@ deleteAll = ->
   if not confirm(gettext("This will mark all boxes as printed so they won't be printed again accidentally. Continue?"))
     return
 
-  tags = $('#items > .box_container')
-  $(tags).hide('slow')
+  boxes = $('#boxes > .box_container')
+  $(boxes).hide('slow')
 
   $.ajax(
     url:  C.urls.all_to_print
     type: 'POST'
     success: ->
-      $(tags).each((index, tag) ->
-        code = $(tag).attr('id')
-        moveTagToPrinted(tag, code)
+      $(tags).each((index, box) ->
+        box_id = $(tag).attr('id')
+        moveBoxToPrinted(tag, box_id)
       )
     error: ->
       $(tags).show('slow')
@@ -100,6 +93,15 @@ deleteAll = ->
 
   return
 
+hideBox = (box, box_id) ->
+  $.ajax(
+    url: C.box_hide_url(box_id)
+    type: 'POST'
+    success: ->
+      $(box).remove()
+    error: ->
+      $(box).show('slow')
+  )
 
 onPriceChange = ->
   input = $(this)
@@ -124,8 +126,28 @@ bindFormEvents = ->
 
   return
 
+# Bind events for a set of '.item_container' elements.
+# @param tags [jQuery set] A set of '.item_container' elements.
+bindBoxEvents = (boxes) ->
+  boxes.each((index, box) ->
+    box = $(box)
+    box_id = box.attr('id')
+
+    bindBoxHideEvents(box, box_id)
+    # bindItemToPrintedEvents(box, box_id)
+
+    return
+  )
+  return
+
+bindBoxHideEvents = (box, box_id) ->
+  $('.box_button_hide', box).click( ->
+    $(box).hide('slow', -> hideBox(box, box_id))
+  )
+
 
 window.boxesConfig = C
 window.addBox = addBox
 window.deleteAll = deleteAll
+window.bindBoxEvents = bindBoxEvents
 window.bindFormEvents = bindFormEvents
