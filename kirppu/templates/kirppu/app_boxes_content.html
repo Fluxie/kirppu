@@ -17,6 +17,39 @@
 
     <div id="box_content">
 
+        <div class="box_content_table box_content_page box_content_force_page_break">
+
+            <div class="box_content_table_header">
+                <div class="box_content_number" >
+                </div>
+                <div class="box_content_table_instructions" >{% trans "Tell this number to the clerk." %}</div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8"><span class="box_title">{% trans "Box description:" %}</span></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8"><span class="box_description">{{ box.description }}</span></div>
+            </div>
+
+            <div class="row box_empty_row">
+            </div>
+            <div class="row box_empty_row">
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2"><span class="box_title">{% trans "Price:" %}</span></div>
+                <div class="col-sm-4"><span class="box_price">{{ box.get_price_fmt }}</span></div>
+            </div>
+
+             <div class="row">
+
+                <div class="col-sm-2"><span class="box_title">{% trans "Vendor:" %}</span></div>
+                <div class="col-sm-4"><span class="box_vendor_id">{{ box.get_vendor_id }}</span></div>
+            </div>
+
+        </div>
+
         {% split_list content as pages 14 %}
 
         {% for page_content in pages %}

@@ -64,6 +64,39 @@
     margin: 2px; /* Compensate for border not being there for locked items */
 }
 
+.box_price:after {
+    content:" \20AC"; /* euro */
+}
+
+.box_vendor_id {
+    font-size: 130%;
+    text-align: center;
+}
+
+/* Box edit forms. */
+.box_editable .box_body form {
+    display: inline;
+}
+.box_editable .box_body form input {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.box_description {
+    width: 8.7cm;
+    height: 2em;
+    margin: 2px; /* Compensate for border not being there for locked items */
+}
+
+.box_adult_tag {
+    position: absolute;
+    top: 1cm;
+    left: 1.75cm;
+    font-weight: bold;
+}
+
 .box_content_header {
 
     border: 1px solid black;
@@ -75,7 +108,7 @@
     transition: width 0.2s;
 }
 
-.box_content_number {
+.box_content_header .box_content_number {
 
     border: 3px solid black;
     left: 0.5em;
@@ -100,60 +133,49 @@
     font-size: 130%;
 }
 
+.box_content_table {
+
+    height: 14cm;
+}
+
+.box_content_table_header {
+
+    height: 9cm;
+}
+
+.box_content_table .box_content_number {
+
+    border: 3px solid black;
+    left: 0.5em;
+    top: 0.5em;
+    width: 8cm;
+    height: 8cm;
+    float: left;
+    position: relative;
+
+}
+.box_content_table_instructions {
+
+    position: relative;
+    top: 35%;
+    font-size: 200%;
+    margin-left: 8.5cm;
+}
+
+.box_content_table .box_description {
+    font-size: 175%;
+}
+
+.box_content_table .box_title  {
+    font-size: 150%;
+}
+
 .box_empty_row {
 
     height: 1em;
 }
 
-@media screen, projection, handheld {
-    .box_editable .box_price {
-        margin: 0px;
-        border: 2px inset;
-    }
-}
-
-/* Box edit forms. */
-.box_editable .box_body form {
-    display: inline;
-}
-.box_editable .box_body form input {
-    background: transparent;
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-.box_description {
-    width: 8.7cm;
-    height: 2em;
-    margin: 2px; /* Compensate for border not being there for locked items */
-}
-
-@media screen, projection, handheld {
-    .box_editable .box_description
-        margin: 0px;
-        border: 2px inset;
-    }
-}
-
-.box_adult_tag {
-    position: absolute;
-    top: 1cm;
-    left: 1.75cm;
-    font-weight: bold;
-}
-
-.box_vendor_id {
-    position: absolute;
-    top: 1cm;
-    left: 3cm;
-}
-
-.box_vendor_id:before {
-    content: 'Vendor: '
-}
-
-.box_button_printed, .box_button_toggle, .box_button_hide {
+.box_button_hide {
     position: absolute;
     right: 0px;
     width: 1.5em;
@@ -165,6 +187,13 @@
 .box_button_hide {
     top: 1em;
     right: 1em;
+}
+
+@media screen, projection, handheld {
+    .box_editable .box_price {
+        margin: 0px;
+        border: 2px inset;
+    }
 }
 
 @media print {
@@ -185,8 +214,12 @@
         display: none;
     }
 
-     .box_content_page {
+    .box_content_page {
         page-break-inside: avoid;
+    }
+
+    .box_content_new_page {
+        page-break-before: always;
     }
 
     @page

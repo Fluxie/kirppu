@@ -10,7 +10,7 @@
                 <div class="col-sm-8"><span class="box_title">{% trans "Box description:" %}</div>
             </div>
             <div class="row">
-                <div class="col-sm-2">{{ description }}</div>
+                <div class="col-sm-2"><span class="box_description">{{ description }}</span></div>
             </div>
 
             <div class="row box_empty_row">
@@ -18,13 +18,13 @@
 
             <div class="row">
                 <div class="col-sm-2"><span class="box_title">{% trans "Price:" %}</span></div>
-                <div class="col-sm-4 item_type">{{ price }}</div>
+                <div class="col-sm-4"><span class="box_price">{{ price }}</span></div>
             </div>
 
              <div class="row">
 
                 <div class="col-sm-2"><span class="box_title">{% trans "Vendor:" %}</span></div>
-                <div class="col-sm-4 item_type">{{ vendor_id }}</div>
+                <div class="col-sm-4"><span class="box_vendor_id">{{ vendor_id }}</span></div>
             </div>
 
         </div>
