@@ -104,18 +104,18 @@
     </form>
 
     {# Output a single item_container as a template for javascript. #}
-    {% include 'kirppu/app_items_item.html' with tag_type="template" name="" price="0" code="" vendor_id="" adult="" locked=False %}
+    {% include 'kirppu/app_items_item.html' with controls_enabled=True tag_type="template" name="" price="0" code="" vendor_id="" adult="" locked=False %}
 
     <div id="items">
         {# Output a template container for every non-printed item user has. #}
         {% for i in items %}
-            {% include 'kirppu/app_items_item.html' with name=i.name price=i.price_fmt code=i.code vendor_id=i.vendor_id tag_type=i.type adult=i.adult locked=i.is_locked %}
+            {% include 'kirppu/app_items_item.html' with controls_enabled=True name=i.name price=i.price_fmt code=i.code vendor_id=i.vendor_id tag_type=i.type adult=i.adult locked=i.is_locked %}
         {% endfor %}
     </div>
     <div style="margin-top: 1cm" id="printed_items">
         {# Output a template container for every printed item user has. #}
         {% for i in printed_items %}
-            {% include 'kirppu/app_items_item.html' with name=i.name price=i.price_fmt code=i.code vendor_id=i.vendor_id tag_type="list" adult=i.adult locked=True %}
+            {% include 'kirppu/app_items_item.html' with controls_enabled=True name=i.name price=i.price_fmt code=i.code vendor_id=i.vendor_id tag_type="list" adult=i.adult locked=True %}
         {% endfor %}
     </div>
 {% endblock %}

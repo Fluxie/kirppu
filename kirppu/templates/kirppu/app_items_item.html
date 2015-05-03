@@ -23,9 +23,11 @@
             {% endif %}
         </div>
 
-        <button class="item_button_hide" title="{% trans "Permanently remove the item." %}" type="button"><span class="glyphicon glyphicon-remove"></span></button>
-        <button class="item_button_printed" title="{% trans "Switch item between printed and not printed lists." %}" type="button"><span class="glyphicon glyphicon-sort"></span></button>
-        {% if tag_type != "list" %}
-            <button class="item_button_toggle" title="{% trans "Toggle size." %}" type="button"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
+        {% if controls_enabled %}
+            <button class="item_button_hide" title="{% trans "Permanently remove the item." %}" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+            <button class="item_button_printed" title="{% trans "Switch item between printed and not printed lists." %}" type="button"><span class="glyphicon glyphicon-sort"></span></button>
+            {% if tag_type != "list" %}
+                <button class="item_button_toggle" title="{% trans "Toggle size." %}" type="button"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
+            {% endif %}
         {% endif %}
     </div>

@@ -259,10 +259,20 @@ class Box(models.Model):
         Gets the vendor of the box
 
         :return: Vendor
-        :rtype: Decimal
+        :rtype: Vendor object
         """
         first_item = self._get_representative_item()
         return first_item.vendor
+
+    def get_vendor_id(self):
+        """
+        Gets the vendor id of the box
+
+        :return: Vendor
+        :rtype: Decimal
+        """
+        first_item = self._get_representative_item()
+        return first_item.vendor.id
 
     def get_items(self):
         """

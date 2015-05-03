@@ -128,6 +128,7 @@
     <script>
         boxesConfig.url_args.box_id = '__placeholder__';
         boxesConfig.urls.box_add = "{% url 'kirppu:box_add' %}";
+        boxesConfig.urls.box_content = "{% url 'kirppu:box_content' '__placeholder__' %}";
         boxesConfig.urls.box_hide = "{% url 'kirppu:box_hide' '__placeholder__' %}";
         boxesConfig.urls.roller = "{% static "img/roller.gif" %}";
         {% if not is_registration_open %}boxesConfig.enabled = false;{% endif %}

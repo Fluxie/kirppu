@@ -1,0 +1,14 @@
+{% load kirppu_tags %}{% load i18n %}
+
+    <div class="box_content_page" >
+
+        {% include 'kirppu/app_boxes_content_page_header.html' with id=box.id description=box.description price=box.get_price_fmt vendor_id=box.get_vendor_id %}
+
+        {# Output an item for every item in the page. #}
+        {% for i in items %}
+
+            {% include 'kirppu/app_items_item.html' with controls_enabled=False name=i.name price=i.price_fmt code=i.code vendor_id=i.vendor_id tag_type="short" adult=i.adult locked=True %}
+
+        {% endfor %}
+
+    </div>

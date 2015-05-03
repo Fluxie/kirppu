@@ -354,6 +354,36 @@ def box_hide(request, box_id):
 
     return HttpResponse()
 
+@login_required
+@require_http_methods(["GET"])
+@barcode_view
+def box_content(request, box_id, bar_type):
+
+    """
+    Get a page containing the contents of one box for printing
+
+    :param request: HttpRequest object.
+    :type request: django.http.request.HttpRequest
+    :return: HttpResponse or HttpResponseBadRequest
+    """
+
+    vendor = Vendor.get_vendor(request.user)
+    boxes = Box.objects.filter(id=box_id, item__vendor=vendor, item__hidden=False).distinct()
+    if boxes.count() == 0:
+        raise Http404()
+    box = boxes[0]
+    items = box.get_items()
+
+    render_params = {
+        'box': box,
+        'content': items,
+        'bar_type': bar_type,
+
+        'vendor_id_param': vendor.id,
+    }
+
+    return render(request, "kirppu/app_boxes_content.html", render_params)
+
 
 def _vendor_menu_contents(request):
     """
@@ -435,8 +465,7 @@ def get_items(request, bar_type):
 
 @login_required
 @require_http_methods(["GET"])
-@barcode_view
-def get_boxes(request, bar_type):
+def get_boxes(request):
     """
     Get a page containing all boxes for vendor.
 

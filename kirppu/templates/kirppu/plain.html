@@ -1,0 +1,19 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Kirppu{% endblock %}</title>
+    {% block head %}
+        <link href="{% static "kirppu/css/general.css" %}" rel="stylesheet">
+        <script src="{% static "kirppu/js/general.js" %}"></script>
+    {% endblock %}
+</head>
+<body>
+
+<div id="body" class="container">
+    {% block body %}{% endblock  %}
+</div>
+
+{% block tail %}{% endblock %}
+</body>
+</html>

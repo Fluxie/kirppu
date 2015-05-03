@@ -1,0 +1,33 @@
+{% extends "kirppu/plain.html" %}{% load kirppu_tags %}{% load i18n %}
+
+{% load static %}
+
+{% block head %}
+
+    <link href="{% static "kirppu/css/general.css" %}" rel="stylesheet">
+    <link href="{% static "kirppu/css/boxes.css" %}" rel="stylesheet">
+    <link href="{% static "kirppu/css/price_tags.css" %}" rel="stylesheet">
+    <script src="{% static "kirppu/js/general.js" %}"></script>
+    <script src="{% static "kirppu/js/jeditable.js" %}"></script>
+    <script src="{% static "kirppu/js/boxes.js" %}"></script>
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="box_content">
+
+        {% split_list content as pages 14 %}
+
+        {% for page_content in pages %}
+
+            {% include 'kirppu/app_boxes_content_page.html' with id=box.id description=box.description price=box.get_price_fmt vendor_id=box.get_vendor_id items=page_content %}
+
+        {% endfor %}
+
+    </div>
+{% endblock %}
+
+{% block tail %}
+
+{% endblock %}

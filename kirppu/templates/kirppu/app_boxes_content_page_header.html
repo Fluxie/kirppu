@@ -1,0 +1,31 @@
+{% load kirppu_tags %}{% load i18n %}
+
+    <div class="box_content_header id="{{ box_id }}">
+
+        <div class="box_content_number">
+        </div>
+        <div class="box_content_description">
+
+            <div class="row">
+                <div class="col-sm-8"><span class="box_title">{% trans "Box description:" %}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">{{ description }}</div>
+            </div>
+
+            <div class="row box_empty_row">
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2"><span class="box_title">{% trans "Price:" %}</span></div>
+                <div class="col-sm-4 item_type">{{ price }}</div>
+            </div>
+
+             <div class="row">
+
+                <div class="col-sm-2"><span class="box_title">{% trans "Vendor:" %}</span></div>
+                <div class="col-sm-4 item_type">{{ vendor_id }}</div>
+            </div>
+
+        </div>
+    </div>
